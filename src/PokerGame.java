@@ -5,6 +5,8 @@ import java.util.Random;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.ArrayList;
 
 public class PokerGame extends Game
 {
@@ -97,64 +99,160 @@ public class PokerGame extends Game
     // Sorts a given hand by rank.
     public int[] sortHandByRank(int[] hand)
     {
-        // Hey there <3
-        // Found a way to do this involving taking the mod 13 of all these #s, 
         Arrays.sort(hand);
         return hand;
     }
     
-    // Scores a hand (Card[]) of cards, and returns the corresponding key from the "hands" hierarchy.
-    // Hands must have at least 5 cards; anything less will cause this to exit and return null.
+    // Sorts a given hand by suit.
+    // Note that this will probably fail if not every suit has the same set of card values, e.g., if one runs A-K and another runs A-10.
+    // However, that's such an unlikely and unwieldy scenario that I'm not going to implement anything for it now.
+    public int[] sortHandBySuit(int[] hand)
+    {
+        int[] ret = new int[hand.length];
+        int currentInd = 0;
+        int numSuits = baseDeck.getNumSuits();
+        // Create buckets for each suit, then sort each bucket before combining their elements back into a sorted hand.
+        ArrayList<ArrayList<Integer>> suitBuckets = new ArrayList<ArrayList<Integer>>();
+        for(int s = 0; s < numSuits; s++)
+        {
+            suitBuckets.add(new ArrayList<Integer>());
+        }
+        for(int c = 0; c < hand.length; c++)
+        {
+            int ind = hand[c]%numSuits;
+            suitBuckets.get(ind).add(hand[c]);
+        }
+        for(ArrayList<Integer> bucket : suitBuckets)
+        {
+            Collections.sort(bucket);
+            for(int card : bucket)
+            {
+                ret[currentInd] = card;
+                currentInd++;
+            }
+        }
+
+        return ret;
+    }
+
+    public int[] getSortedHandValues(int[] hand)
+    {
+        int[] sortedHandValues = sortHandByRank(hand);
+        for(int key = 0 ; key < sortedHandValues.length; key++)
+        {
+            sortedHandValues[key] = sortedHandValues[key]/baseDeck.getNumSuits();
+        }
+        return sortedHandValues;
+    }
+
+    // Searches for the first pair in a hand, returns its value if found, -1 if not.
+    // Collections has a function to get the frequencies of each element in a List, called "frequency(list, target)". Yay!
+    // TODO: Make a version that actually looks at each Card and checks its values, then finds pairs. And so forth for the other hands... Hm.
+    public int hasXOfAKind(int[] hand, int cardsNeeded)
+    {
+        if(hand.length <= (cardsNeeded-1))
+        {
+            System.out.println("Hand too small.");
+            return -1;
+        }
+
+        // Get the values for each card/key in the hand.
+        int[] ranges = getSortedHandValues(hand);
+        
+        // Thank you https://stackoverflow.com/questions/880581/how-can-i-convert-int-to-integer-in-java
+        ArrayList<Integer> handValues = new ArrayList<Integer>(Arrays.asList(Arrays.stream(ranges).boxed().toArray(Integer[]::new)));
+        for(int key : ranges)
+        {
+            if(Collections.frequency(handValues, ranges[key]) >= cardsNeeded)
+            {
+                return key;
+            }
+        }
+        return -1;
+
+
+        /*
+        // Keeping this around for reference, in case the Collections framework can't be used.
+        int[] sortedHand = sortHandByRank(hand);
+        int pairVal = hand[0];
+        int range = hand[0]/baseDeck.getNumSuits();
+        for(int k = 1; k < hand.length; k++)
+        {
+            // If the current key is in the same value range as the key being checked against (e.g., keys 1 and 3 for Ace of Spades and Ace of Diamonds), return the value of the checked key.
+            if(range == hand[k]/baseDeck.getNumSuits())
+            {
+                return pairVal;
+            }
+            // Otherwise, check the next key against the current key and its range.
+            else
+            {
+                pairVal = hand[k];
+                range = hand[k]/baseDeck.getNumSuits();
+            }
+        }
+        return -1;
+        */
+    }
+    
+    // Scores a hand (int[]) of cards, and returns the corresponding key from the "hands" hierarchy.
+    // Hands must have at least 1 card; anything less will cause this to exit and return -1.
     // Subclasses of PokerClass may override this to include new hands (I'm looking at you, flush house and flush five).
-    public Map<Integer, Integer> scoreHand(int[] hand)
+    public int scoreHand(int[] hand)
     {
         // Length check
-        if(hand.length < 5)
+        if(hand.length < 1)
         {
             System.out.println("This hand won't work, it's too small! (" + hand.length + " cards)");
-            return null;
+            return -1;
         }
-        // If it passes, go through and score the hand. Pseudocode for now.
-        /*
-        if(hasPair(hand))
+
+        // Has a pair
+        if(hasXOfAKind(hand, 2) != -1)
         {
-            if(hasThreeOfAKind(hand))
+            // Has a three of a kind
+            if(hasXOfAKind(hand, 3) != -1)
             {
-                if(hasFourOfAKind(hand))
+                if(hasXOfAKind(hand, 4) != -1)
                 {
-                    // Four of a Kind
-                    return <2, rank>;
+                    return 2;
                 }
                 else
                 {
-                    Remove Three of a Kind from hand
-                    if(hasPair(hand))
+                    int[] sortedHandValues = getSortedHandValues(hand);
+                    int cutoffInd = Arrays.binarySearch(sortedHandValues, hasXOfAKind(sortedHandValues, 3));
+                    // Has a full house
+                    if(hasXOfAKind(Arrays.copyOfRange(sortedHandValues, cutoffInd, sortedHandValues.length), 2) != -1)
                     {
-                        // Full House
-                        return <3, rank>;
+                        return 3;
                     }
                     else
                     {
-                        // Three of a Kind
-                        return <6, rank>;
+                        return 6;
                     }
                 }
             }
+            // Check for two pairs
             else
             {
-                Remove Pair from hand
-                if(hasPair(hand))
+                int[] sortedHandValues = getSortedHandValues(hand);
+                int cutoffInd = Arrays.binarySearch(sortedHandValues, hasXOfAKind(sortedHandValues, 2));
+                // Has two pairs
+                if(hasXOfAKind(Arrays.copyOfRange(sortedHandValues, cutoffInd, sortedHandValues.length), 2) != -1)
                 {
-                    // Two Pair
-                    return <7, rank>;
+                    return 7;
                 }
                 else
                 {
-                    // Pair
-                    return <8, rank>;
+                    return 8;
                 }
             }
         }
+        else
+        {
+
+        }
+
+        /*
         else
         {
             if(hasFlush(hand))

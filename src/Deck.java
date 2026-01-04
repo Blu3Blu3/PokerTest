@@ -15,6 +15,8 @@ public class Deck
 	// Hey, note to self: Remember that Maps are only meant to hold key-value pairs. If you want more functionality, you'll have to use objects for the values, or use something else.  
 	// The whole deck of Cards.
 	private TreeMap<Integer, Card> deck = new TreeMap<Integer, Card>();
+	private String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
+	private int maxValue = 13;
 	// The name of the deck. More useful once there are multiple decks to select from.
 	private String name;
 	
@@ -27,16 +29,16 @@ public class Deck
 		return deck;
 	}
 	
-	public String getName()
-	{
-		return name;
-	}
-	
 	// For if you have a deck (TreeMap) ready to go.
 	// TODO: Make this compatible with the other Map types, or at least just Map. It may be useful to have non-sorted decks...
 	public void setDeck(TreeMap<Integer, Card> deck)
 	{
 		this.deck = deck;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public void setName(String name)
@@ -61,18 +63,33 @@ public class Deck
 	{
 		deck.put(key, new Card(value, suit, suitDesc, cardDesc));
 	}
-	
-	
-	
+
+	// Get the number of suits in the deck.
+	public int getNumSuits()
+	{
+		return suits.length;
+	}
+
+	// Get the maximum value of a card in the deck.
+	// Changing this doesn't really provide much meaning unless the deck is also changed to reflect it, and that is effectively the same as making a new deck.
+	// Suffice to say, there's no need for this to have a setter.
+	public int getMaxValue()
+	{
+		return maxValue;
+	}
+
+
+
+
 	// CONSTRUCTORS //
 	
 	public Deck()
 	{
 		// Initialize the deck as a standard set of 52 playing cards.
-		String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
-		for(int s = 0; s <= suits.length; s++)
+		// All Aces first, then 2s, etc., with suits in order of Spades, Hearts, Diamonds, Clubs.
+		for(int n = 1; n <= maxValue; n++)
 		{
-			for(int n = 1; n <= 13; n++)
+			for(int s = 0; s <= suits.length; s++)
 			{
 				switch(n)
 				{
