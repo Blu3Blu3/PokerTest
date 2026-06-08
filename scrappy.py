@@ -1,5 +1,7 @@
 # Raaa I love gambling raaa
 
+import random
+
 # Globals
 HANDS = ("High Card", "Pair", "Two Pairs", "Three of a Kind", "Straight",
          "Flush", "Full House", "Four of a Kind", "Straight Flush", "Royal Flush")
@@ -45,7 +47,7 @@ def findMaxOfAKind(cards) -> int:
     sortedCards = sorted(cards, key = lambda card: card.getCard(sortBySuit=False))
     
     # DEBUG: Say each card first.
-    print("Working on:\n")
+    print("Working on:")
     for s in sortedCards:
         print(s.sayCard())
     print("\n")
@@ -63,33 +65,34 @@ def findMaxOfAKind(cards) -> int:
     currentOfAKind = 0
     currentValue = sortedCards[0].getValue()
     
+    # From the second card onwards (if there are any)...
     for card in sortedCards:
         # If the current card's value matches the currently checked value:
-        #   Increment currentMaxOfAKind by 1 and continue.
+        #   Increment currentOfAKind by 1 and continue.
         if card.getValue() == currentValue:
             currentOfAKind += 1
-        # Else, set currentValue to the current card's value.
-        #   If currentOfAKind > maxOfAKind, set maxMatching to currentOfAKind. Then, reset currentOfAKind.
+            currentValue = card.getValue()
+            if currentOfAKind > maxOfAKind:
+                maxOfAKind = currentOfAKind
+                maxValue = card.getValue()
+        # Else...
+        #   If currentOfAKind > maxOfAKind, set maxOfAKind to currentOfAKind. Then, reset currentOfAKind.
         #   Else, continue.
         else:
+            # If there's a value switch on equal OAKs (ex., pair Aces to pair Jacks), maxVal = the higher-scoring one.
+            if currentOfAKind == maxOfAKind:
+                # Add a check for Aces (value = 0) since they beat everything out.
+                if (currentValue > maxValue and maxValue != 0):
+                    maxValue = currentValue
             if currentOfAKind > maxOfAKind:
                 # Also, if maxValue != currentValue, set maxValue to currentValue.
-                if maxValue != currentValue:
-                    maxValue = currentValue
                 maxOfAKind = currentOfAKind
+                maxValue = card.getValue()
+            currentOfAKind = 1
             currentValue = card.getValue()
-            currentOfAKind = 0
-            
-    # Final check, for if all cards have the same value
-    # Actually no, here's what you do:
-    '''
-    for card in sortedCards:
-        if cardVal = currentVal:
-            currentOAK++
-        if currentOAK > maxOAK:
-            maxOAK = currentOAK
-        Also do a value check in here somewhere
-    '''
+
+    # I just realized this is finding the mode. There's a method for that in the "statistics"
+    # module, but nah.... Not now.....
             
     return [maxOfAKind, maxValue]
             
@@ -97,9 +100,17 @@ def findMaxOfAKind(cards) -> int:
 test1 = (Card(0, 0), Card(0, 1), Card(0, 2), Card(0, 3), Card(0, 4)) # High card
 test2 = (Card(0, 0), Card(1, 0), Card(2, 0), Card(0, 3), Card(1, 3)) # 3OAK
 test3 = (Card(0, 0), Card(0, 0), Card(0, 0), Card(0, 0), Card(0, 0)) # 5OAK
+
 testEmpty = ()
 testOverflow1 = (Card(0, 0), Card(0, 1), Card(0, 2), Card(0, 3), Card(0, 4), Card(0, 5), Card(0, 6)) # High card
 testOverflow2 = (Card(0, 0), Card(0, 1), Card(0, 2), Card(0, 3), Card(0, 4), Card(0, 5), Card(0, 5)) # Pair
+
+testRandom1 = []
+for r in range(5):
+    testRandom1.append(Card(random.randint(0, 3), random.randint(0, 12)))
+testRandom2 = []
+for r in range(50):
+    testRandom2.append(Card(random.randint(0, 3), random.randint(0, 12)))
 
 print(f"Test 1: {findMaxOfAKind(test1)}",
       f"Test 2: {findMaxOfAKind(test2)}",
@@ -107,22 +118,9 @@ print(f"Test 1: {findMaxOfAKind(test1)}",
       f"Test Empty: {findMaxOfAKind(testEmpty)}",
       f"Test Overflow 1: {findMaxOfAKind(testOverflow1)}",
       f"Test Overflow 2: {findMaxOfAKind(testOverflow2)}",
+      f"Test Random 1: {findMaxOfAKind(testRandom1)}",
+      f"Test Random 2: {findMaxOfAKind(testRandom2)}",
       sep = "\n")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      
+      
+      
