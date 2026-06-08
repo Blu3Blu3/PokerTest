@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 // A class for making a deck of cards whose values are stored as key-value pairs.
-// Ex. {
+// Note (1/19/2026): Something I noticed about opting to use a map of integers to Cards is that it should reduce the amount of space needed
+// 		for any game function to run (e.g., scoring a hand in poker), but it adds extra complications when solely trying to do things using the
+//		integer keys. Maybe it's time to bite the bullet and actually access the Cards using the integer keys, instead of just using the keys.
+
 public class Deck
 {
 	// VARIABLES //

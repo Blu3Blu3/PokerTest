@@ -104,8 +104,6 @@ public class PokerGame extends Game
     }
     
     // Sorts a given hand by suit.
-    // Note that this will probably fail if not every suit has the same set of card values, e.g., if one runs A-K and another runs A-10.
-    // However, that's such an unlikely and unwieldy scenario that I'm not going to implement anything for it now.
     public int[] sortHandBySuit(int[] hand)
     {
         int[] ret = new int[hand.length];
@@ -113,14 +111,26 @@ public class PokerGame extends Game
         int numSuits = baseDeck.getNumSuits();
         // Create buckets for each suit, then sort each bucket before combining their elements back into a sorted hand.
         ArrayList<ArrayList<Integer>> suitBuckets = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Integer> outOfBoundsBucket = new ArrayList<Integer>();
         for(int s = 0; s < numSuits; s++)
         {
             suitBuckets.add(new ArrayList<Integer>());
         }
         for(int c = 0; c < hand.length; c++)
         {
-            int ind = hand[c]%numSuits;
-            suitBuckets.get(ind).add(hand[c]);
+            // Pull the Card object using its key, then check its suit.
+            int ind = baseDeck.getCard(hand[c]).getSuit();
+            try
+            {
+                suitBuckets.get(ind).add(hand[c]);
+            }
+            // If the suit doesn't have a bucket, then say the suit's OOB and put it in a bucket on its own.
+            catch (Exception e)
+            {
+                System.out.println("Suit number out of bounds.");
+                outOfBoundsBucket.add(hand[c]);
+            }
+            
         }
         for(ArrayList<Integer> bucket : suitBuckets)
         {
