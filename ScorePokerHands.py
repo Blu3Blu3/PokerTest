@@ -173,19 +173,45 @@ def is4OAK(c1, c2, c3, c4):
 def is5OAK(c1, c2, c3, c4, c5):
     return c1.getValue() == c2.getValue() and c1.getValue() == c3.getValue() and c1.getValue() == c4.getValue() and c1.getValue() == c5.getValue()
 
-# In the place of those "OAK" functions, let's make a general one that finds the highest "OAK" given up to five cards.
-# Given 1-5 cards, returns the largest # of cards that have the same value.
+# In the place of those "OAK" functions, let's make a general one that finds the highest "OAK" given.
+# Given a list of cards, returns the largest # of cards that have the same value.
 # There's not much sense in making a variant for suit since the only hands that would check that are all 5-card hands.
-#   *cards (Card, Card, ...): Any number of cards, though 1-5 are expected.
+#   cards (Card, Card, ...): Any number of cards, though 1-5 are expected.
 def findMostMatching(*cards):
     # Sort the cards first by value and suit.
-    sortedCards = sorted(cards, key=lambda card: card.getCard(sortedBySuit=False))
+    sortedCards = sorted(cards, key=lambda card: card.getCard(sortBySuit=False))
 
-    # Then, iterate through them keeping track of the current value, the current # of cards matching it, and the max # of matching cards.
-    # TODO: This.
-    currentValue = 0
-    for c in sortedCards:
-        pass
+    # DEBUG: Say each card first.
+    print("Working on:")
+    for s in sortedCards:
+        print(s.sayCard())
+    print("\n")
+
+    # Empty list check
+    if len(cards) < 1:
+        print("Invalid hand length: too short")
+        return [-1, -1]
+
+    # Track the highest "of a kind" / "OAK", its value, and the current "OAK".
+    maxOfAKind = 1
+    maxValue = sortedCards[0].getValue()
+    currentOfAKind = 0
+    currentValue = sortedCards[0].getValue()
+
+    for card in sortedCards:
+        # If the current card's value matches the currently checked value:
+        #    Increment currentOfAKind by 1.
+        #    Affirm that currentValue = the current card's value.
+        #    Set maxOfAKind to currentOfAKind if the latter is greater; same with the values.
+        if card.getValue() == currentValue:
+            currentOfAKind += 1
+            currentValue = card.getValue()
+            if currentOfAKind > maxOfAKind:
+                maxOfAKind = currentOfAKind
+                if currentValue > maxValue and maxValue != 0:
+                    maxValue = currentValue
+
+    # TODO: Get the rest later, u got no time >:(
 
 
 # Given two cards, returns which of their values is higher.
@@ -221,12 +247,12 @@ def scoreHand(cardsPlayed: list[Card]):
         case 2:
             if isPair(cardsPlayed[0], cardsPlayed[1]):
                 hand = 2
-                suit = getHigherSuit(*cardsPlayed)
-                rank1 = getHigherValue(*cardsPlayed)
+                suit = getHigherSuit(cardsPlayed)
+                rank1 = getHigherValue(cardsPlayed)
             else:
                 hand = 1
-                suit = getHigherSuit(*cardsPlayed)
-                rank1 = getHigherValue(*cardsPlayed)
+                suit = getHigherSuit(cardsPlayed)
+                rank1 = getHigherValue(cardsPlayed)
         # Can be 30AK, pair, or high card
         case 3:
             pass
