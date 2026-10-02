@@ -1,11 +1,11 @@
-'''
+"""
 Christian Guiang
 Patience is a virtue... just hang in there and do your best. <3
 Started: 6/2/2026
 Finished: -----
 Validated: -----
-Last updated: 6/7/2026
-    TODO: Rework the docstrings (the stuff in ''' ''') to be just below the function declarations.
+Last updated: 9/12/2026
+    TODO: Rework the docstrings (the stuff in """ """) to be just below the function declarations.
     Reworked "of a kind" check functions to be one function.
 
 Testing out how to score poker hands before moving to program it in Java.
@@ -13,9 +13,9 @@ Testing out how to score poker hands before moving to program it in Java.
 Here, there will be base classes for cards and decks, then methods for
 basic operations (i.e., sorting, shuffling) and hand scoring (i.e.,
 comparing hand types and card values).
-'''
+"""
 
-'''
+"""
 Note to self: you can import just select things from a module using "from moduleName import ..."
 Ideally, this is done with a select few functions or vars that you'll use repeatedly, because
 you can just use them as normal without having to address their namespace.
@@ -26,11 +26,11 @@ You can import everything with "from moduleName import *", but this is considere
 it floods your current namespace with everything from the module. This leaves you more prone to errors
 because of things from the module matching var or function names with your namespace's things, leaving
 Python confused as to which to use.
-'''
+"""
 import random
 
 # Globals
-HANDS = ("High Card", "Pair", "Two Pairs", "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind", "Straight Flush", "Royal Flush")
+HANDS = ("High Card", "Pair", "Two Pairs", "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind", "Straight Flush", "Royal Flush", "Five of a Kind", "Flush House", "Flush Five")
 SUITS = ("Clubs", "Diamonds", "Hearts", "Spades")
 VALUES = ("Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King")
 MODIFIERS_GOOD = ("Wild", "Lucky", "Repeat")
@@ -40,7 +40,7 @@ MODIFIERS_BAD = ("Burning", "Sticky", "Frail")
 #   suit (int): The index of the card's suit (string) in "SUITS" above.
 #   value (int): The index of the card's value (string) in "VALUES" above.
 class Card:
-    '''
+    """
     Note to self: Python doesn't allow traditional overloading.
     Instead, you may opt to use default values or the "*args" and/or "**kwargs" parameters.
 
@@ -72,33 +72,40 @@ class Card:
                         print(f"Unknown trait {k} = {kwargs[k]}.")
             print(f"Done! Say hello to {nullo.name} the Level {nullo.level} {nullo.class}!")
             return nullo
-    '''
+    """
     def __init__(self, suit = 0, value = 0):
         self.suit = suit
         self.value = value
 
     # Getters and setters
     # TODO: Rework the getters and setters to use decorators (e.g., "@property", "@setter", and "@deleter") and documentation.
-    def getSuit(self):
+    def get_suit(self):
         return self.suit
     
-    def getValue(self):
+    def get_value(self):
         return self.value
     
-    def setSuit(self, suit):
+    def set_suit(self, suit):
         self.suit = suit
 
-    def setValue(self, value):
+    def set_value(self, value):
         self.value = value
 
-    # Returns a string saying what card this is.
-    def sayCard(self):
+    def say_card(self):
+        """
+        Returns a string saying what card this is.
+        """
         return f"{VALUES[self.value]} of {SUITS[self.suit]}"
     
     # Returns a list of this card's suit and value.
     #   sortBySuit (bool): Denotes whether or not to return a list with the suit first. Useful for sorting cards with "sorted".
-    def getCard(self, sortBySuit=True):
-        return [self.suit, self.value] if sortBySuit else [self.value, self.suit]
+    def get_card(self, sort_by_suit=True):
+        """
+        Returns a list of this card's suit and value.
+
+        sortBySuit (bool): Denotes whether to return a list with the suit first.
+        """
+        return [self.suit, self.value] if sort_by_suit else [self.value, self.suit]
 
 
 # A prototype of the kind of card used in a game. Feels familiar, no?
@@ -119,34 +126,34 @@ class Deck():
         self.name = name
 
     # Getters and setters
-    def getCards(self):
+    def get_cards(self):
         return self.cards
     
-    def getName(self):
+    def get_name(self):
         return self.name
     
     # Overwrites the current list of cards with a given list.
-    def setCards(self, cards):
+    def set_cards(self, cards):
         self.cards = cards.copy()
 
-    def setName(self, name):
+    def set_name(self, name):
         self.name = name
 
-    def addCard(self, newCard: Card):
+    def add_card(self, newCard: Card):
         self.cards.append(newCard)
 
     # Removes from the deck a card whose suit and value match those given.
-    def removeCard(self, suit, value):
+    def remove_card(self, suit, value):
         pass
 
     # Returns a shuffled copy of the cards in the deck.
-    def shuffleDeck(self):
+    def shuffle_deck(self):
         copy = self.cards.copy()
         shuffled = []
         remaining = len(self.cards)
         while remaining > 0:
-            currentCard = random.randrange(0, remaining)
-            shuffled.append(copy.pop(currentCard))
+            current_card = random.randrange(0, remaining)
+            shuffled.append(copy.pop(current_card))
             remaining -= 1
         del copy
         return shuffled.copy()
@@ -154,37 +161,43 @@ class Deck():
 # TODO: Now that you've researched Python's "sorted()" function a bit, look into Java's Collections and Comparator classes.
 # TODO: The former has a sort function and the latter would take place of the lambda used below.
 
-# Returns True if two Cards have the same value.
-def isPair(c1, c2):
-    return c1.getValue() == c2.getValue()
 
-# Returns True if three Cards have the same value.
-def is3OAK(c1, c2, c3):
-    return c1.getValue() == c2.getValue() and c1.getValue() == c3.getValue()
+def is_pair(c1, c2):
+    """
+    Returns True if two Cards have the same value.
+    """
+    return c1.get_value() == c2.get_value()
 
-# Returns True if four Cards have the same value.
-def is4OAK(c1, c2, c3, c4):
+def is_3oak(c1, c2, c3):
+    """
+    Returns True if three Cards have the same value.
+    """
+    return c1.get_value() == c2.get_value() and c1.get_value() == c3.get_value()
+
+def is_4oak(c1, c2, c3, c4):
+    """
+    Returns True if four Cards have the same value.
+    """
     return c1.getValue() == c2.getValue() and c1.getValue() == c3.getValue() and c1.getValue() == c4.getValue()
 
-# Returns True if five Cards have the same value.
-# It'd be neat to shorten this somehow, but I can't think of any method to do that right now.
-# Oh hey, turns out there is a way to shorten this: use the spread operator "*"!
-# Let's just comment these all out just in case they're needed later.
-def is5OAK(c1, c2, c3, c4, c5):
+def is_5oak(c1, c2, c3, c4, c5):
+    """
+    Returns True if five Cards have the same value.
+    """
     return c1.getValue() == c2.getValue() and c1.getValue() == c3.getValue() and c1.getValue() == c4.getValue() and c1.getValue() == c5.getValue()
 
 # In the place of those "OAK" functions, let's make a general one that finds the highest "OAK" given.
 # Given a list of cards, returns the largest # of cards that have the same value.
 # There's not much sense in making a variant for suit since the only hands that would check that are all 5-card hands.
 #   cards (Card, Card, ...): Any number of cards, though 1-5 are expected.
-def findMostMatching(*cards):
+def find_most_matching(*cards):
     # Sort the cards first by value and suit.
-    sortedCards = sorted(cards, key=lambda card: card.getCard(sortBySuit=False))
+    sorted_cards = sorted(cards, key=lambda card: card.getCard(sortBySuit=False))
 
     # DEBUG: Say each card first.
     print("Working on:")
-    for s in sortedCards:
-        print(s.sayCard())
+    for s in sorted_cards:
+        print(s.say_card())
     print("\n")
 
     # Empty list check
@@ -195,7 +208,7 @@ def findMostMatching(*cards):
     # Track the highest "of a kind" / "OAK", its value, and the current "OAK".
     maxOfAKind = 1
     maxValue = sortedCards[0].getValue()
-    currentOfAKind = 0
+    currentOfAKind = 1
     currentValue = sortedCards[0].getValue()
 
     for card in sortedCards:
@@ -211,7 +224,7 @@ def findMostMatching(*cards):
                 if currentValue > maxValue and maxValue != 0:
                     maxValue = currentValue
 
-    # TODO: Get the rest later, u got no time >:(
+    return (maxOfAKind, maxValue)
 
 
 # Given two cards, returns which of their values is higher.
@@ -236,16 +249,17 @@ def scoreHand(cardsPlayed: list[Card]):
     suit = -1
     rank1 = -1
     rank2 = -1
+    sortedCards = sorted(cardsPlayed, key=lambda card: card.getCard(sortBySuit=False))
 
     match len(cardsPlayed):
         # Can only be high card
         case 1:
             hand = 1
-            suit = cardsPlayed[0].getSuit()
-            rank1 = cardsPlayed[0].getValue()
+            suit = sortedCards[0].getSuit()
+            rank1 = sortedCards[0].getValue()
         # Can be pair or high card
         case 2:
-            if isPair(cardsPlayed[0], cardsPlayed[1]):
+            if isPair(sortedCards[0], sortedCards[1]):
                 hand = 2
                 suit = getHigherSuit(cardsPlayed)
                 rank1 = getHigherValue(cardsPlayed)
