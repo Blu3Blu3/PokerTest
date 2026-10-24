@@ -1,0 +1,89 @@
+1.  [PASS] Pair - Jack of Diamonds
+2.  [PASS] High Card - King of Diamonds
+3.  [PASS] High Card - King of Spades
+4.  [PASS] Three of a Kind - Queen of Spades
+5.  [PASS] Royal Flush - Diamonds
+6.  [PASS] Three of a Kind - Six of Spades
+7.  [PASS] High Card - Ace of Diamonds
+8.  [PASS] Pair - Nine of Spades
+9.  [PASS] Two Pair - Ten of Spades
+10. [PASS] Pair - Five of Spades
+11. [PASS] Straight - Queen of Spades
+12. [PASS] Two Pair - Jack of Hearts
+13. [PASS] Two Pair - King of Spades
+14. [PASS] Pair - Six of Hearts
+15. [PASS] Two Pair - Jack of Hearts
+16. [PASS] Pair - Four of Hearts
+17. [PASS] High Card - Queen of Spades
+18. [PASS] Three of a Kind - Jack of Spades
+19. [PASS] Three of a Kind - Seven of Spades
+20. [PASS] Pair - Ten of Diamonds
+21. [PASS] Straight - Ace of Diamonds
+22. [PASS] High Card - Queen of Hearts
+23. [PASS] Three of a Kind - Six of Spades
+24. [PASS] Straight - Ace of Hearts
+25. [PASS] Pair - Three of Spades
+26. [PASS] High Card - King of Spades
+27. [PASS] Two Pair - Seven of Spades
+28. [PASS] Pair - Six of Spades
+29. [PASS] Pair - Eight of Hearts
+30. [PASS] High Card - Ace of Clubs
+31. [PASS] Pair - Ace of Spades
+32. [PASS] Pair - Five of Hearts
+33. [PASS] High Card - Ten of Hearts
+34. [PASS] Straight Flush - Eight of Spades
+35. [PASS] Pair - Nine of Hearts
+36. [PASS] Straight Flush - Five of Clubs 
+37. [PASS] Two Pair - Queen of Hearts
+38. [PASS] Three of a Kind - Jack of Hearts
+39. [PASS] High Card - Ace of Spades
+40. [PASS] Royal Flush - Hearts
+41. [PASS] Pair - Queen of Hearts
+42. [PASS] Straight Flush - Seven of Diamonds
+43. [PASS] Straight - Five of Spades
+44. [PASS] Pair - Jack of Spades
+45. [PASS] Straight - Queen of Spades
+46. [PASS] Pair - Nine of Spades
+47. [PASS] High Card - Ace of Spades
+48. [PASS] Four of a Kind - Jacks
+49. [PASS] Pair - Ace of Spades
+50. [PASS] Three of a Kind - Jack of Spades
+51. [PASS] High Card - Ace of Hearts
+52. [PASS] Pair - Seven of Spades
+53. [PASS] Two Pair - Ten of Hearts
+54. [PASS] Three of a Kind - Three of Spades
+55. [PASS] Straight Flush - Eight of Hearts
+56. [PASS] Full House - Jack of Spades
+57. [PASS] Flush - King of Hearts
+58. [PASS] Two Pair - King of Diamonds
+59. [PASS] Pair - Ace of Spades
+60. [PASS] Three of a Kind - King of Spades
+61. [PASS] Straight - Ace of Clubs
+62. [PASS] High Card - Ace of Hearts
+63. [PASS] Straight - Ace of Spades
+64. [PASS] Pair - Queen of Hearts
+65. [PASS] Pair - Jack of Spades
+66. [PASS] Three of a Kind - Jack of Spades
+67. [PASS] Straight Flush - Queen of Clubs
+68. [PASS] Pair - Nine of Diamonds
+69. [PASS] Flush - Ace of Hearts
+70. [PASS] Flush - King of Hearts
+71. [PASS] Pair - Five of Spades
+72. [PASS] Full House - King of Spades
+73. [PASS] Royal Flush - Spades
+74. [PASS] Pair - Five of Hearts
+75. [PASS] Pair - Queen of Hearts
+76. [PASS] Pair - Jack of Spades
+77. [PASS] Pair - Ace of Diamonds
+78. [PASS] Pair - Ace of Spades
+79. [PASS] High Card - Queen of Diamonds
+80. [PASS] Straight - Jack of Spades
+81. [PASS] Two Pair - Ace of Diamonds
+82. [PASS] Three of a Kind - Hearts
+
+---
+Imp. 1. [PASS] Flush Five - Ten of Spades
+Imp. 2. [PASS] Four of a Kind - Tens
+Imp. 3. [PASS] Flush House - Ten of Spades
+Imp. 4. [PASS] Five of a Kind - Ten of Spades
+Imp. 5. [PASS] Pair - Queen of Spades
